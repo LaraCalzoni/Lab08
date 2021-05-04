@@ -32,10 +32,25 @@ public class Model {
 		dao.loadAllAirports(idMap);
 		Graphs.addAllVertices(this.grafo, idMap.values());
 		
-		for(Adiacenza a : dao.getVoli()) {
-			Airport a1 = this.cercaAirport(a.getId1());
-			Airport a2 = this.cercaAirport(a.getId2());
-			Graphs.addEdge(this.grafo, a1, a2, a.getDistanza());
+		for(Adiacenza aa1 : dao.getVoli()) {
+			int media = 0;
+			Airport a1 = this.cercaAirport(aa1.getId1());
+			Airport a2 = this.cercaAirport(aa1.getId2());
+			
+			if(!this.grafo.containsEdge(a1, a2)) {
+				if(aa1.getDistanza() >= distanza) {
+					Graphs.addEdge(this.grafo, a1, a2, aa1.getDistanza());
+				}
+				
+			}
+			else {	
+				media = (int) ((aa1.getDistanza()+this.grafo.getEdgeWeight(this.grafo.getEdge(a2, a1)))/2);
+				this.grafo.removeEdge(a2, a1);
+				if(media >= distanza) {
+					Graphs.addEdge(this.grafo, a1, a2, media);
+				}
+			}
+			
 		}
 		System.out.println("GRAFO CREATO!");
 		System.out.println("# vertici: "+this.grafo.vertexSet().size());
@@ -49,6 +64,16 @@ public class Model {
 			}
 		}
 		return null;
+	}
+
+
+	public Graph<Airport, DefaultWeightedEdge> getGrafo() {
+		return grafo;
+	}
+
+
+	public void setGrafo(Graph<Airport, DefaultWeightedEdge> grafo) {
+		this.grafo = grafo;
 	}
 	
 }
