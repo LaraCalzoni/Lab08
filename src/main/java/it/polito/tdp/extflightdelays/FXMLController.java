@@ -46,7 +46,7 @@ public class FXMLController {
     	String s = "Il grafo contiene "+grafo.vertexSet().size()+" vertici e "+grafo.edgeSet().size()+" archi.\n";
     	
     	for(DefaultWeightedEdge e : grafo.edgeSet()) {
-    		s += e+"\n";
+    		s += grafo.getEdgeSource(e)+" - "+grafo.getEdgeTarget(e)+" : "+grafo.getEdgeWeight(e)+"\n";
     	}
     	txtResult.setText(s);
     }
